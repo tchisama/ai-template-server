@@ -3,6 +3,16 @@ const express = require('express');
 const cors = require('cors');
 const OpenAI =require("openai");
 require('dotenv').config();
+const mongoose = require("mongoose");
+const { mongoURI } = require('./config/config');
+const authRoutes = require('./routes/authRoutes');
+
+mongoose.connect(mongoURI)
+const conn = mongoose.connection
+conn.once("open",()=>{
+  console.log("done connecting")
+})
+
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -17,6 +27,8 @@ app.use(cors());
 // Use body-parser middleware to parse JSON
 app.use(express.json());
 
+app.use('/auth',authRoutes)
+
 // Define a simple route
 app.post('/api/genirate', async(req, res) => {
 const response = await openai.chat.completions.create({
@@ -24,7 +36,7 @@ const response = await openai.chat.completions.create({
     messages: [
       {
         "role": "system",
-        "content": "Your task is to generate HTML templates based on input messages. You will receive objects like this:\\n{\\n\\\"message\\\": \\\"info text\\\",\\n\\\"code\\\": \\\"code\\\"\\n}\\nYou should return an HTML template based on the 'message' , use css classes with uppercase name and ids dont select with elements like [input,*,body,button].use the link of fontawsome and add icons to buttons. If you provide a 'code', the template should be modified based on the code provided. Use this image as the default image URL: 'https://th.bing.com/th/id/R.77ca77d32b8b8e97122ff20b2fff9658?rik=gFvl%2bFaxCCSU9A&riu=http%3a%2f%2fcdn.wallpapersafari.com%2f24%2f66%2fjVJNKu.png&ehk=BeYPDSonYIebD%2fPBR8lb2uwto%2fWI46j07m6ceP5IG2c%3d&risl=&pid=ImgRaw&r=0'."
+        "content": "Your task is to generate HTML templates based on input messages. You will receive objects like this:\\n{\\n\\\"message\\\": \\\"info text\\\",\\n\\\"code\\\": \\\"code\\\"\\n}\\nYou should return an HTML template based on the 'message' , use css classes with uppercase name and ids dont select with elements like [input,*,body,button].use the link of fontawsome and add icons to all buttons based on the button title . If you provide a 'code', the template should be modified based on the code provided. Use this image as the default image URL: 'https://th.bing.com/th/id/R.77ca77d32b8b8e97122ff20b2fff9658?rik=gFvl%2bFaxCCSU9A&riu=http%3a%2f%2fcdn.wallpapersafari.com%2f24%2f66%2fjVJNKu.png&ehk=BeYPDSonYIebD%2fPBR8lb2uwto%2fWI46j07m6ceP5IG2c%3d&risl=&pid=ImgRaw&r=0'."
       },
       {
         "role": "user",

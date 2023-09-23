@@ -1,9 +1,3 @@
-
-
-
-
-
-
 const puppeteer = require('puppeteer');
 
 (async () => {
@@ -88,3 +82,8 @@ const puppeteer = require('puppeteer');
 
   await browser.close();
 })();
+
+
+
+
+
