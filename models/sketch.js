@@ -1,4 +1,4 @@
-const mongoose = rquire("mongoose");
+const mongoose = require("mongoose");
 
 const sketchSchema = new mongoose.Schema({
     name:String,
@@ -6,9 +6,12 @@ const sketchSchema = new mongoose.Schema({
     image:String,
     description:String,
     owner:String,
-},{
-    timestamp:{
-        createdAt:'createdAt',
-        updatedAt:false,
-    }
-})
+}
+,
+{
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
+}
+)
+
+
+module.exports = mongoose.model("Sketch",sketchSchema)

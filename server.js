@@ -6,6 +6,7 @@ require('dotenv').config();
 const mongoose = require("mongoose");
 const { mongoURI } = require('./config/config');
 const authRoutes = require('./routes/authRoutes');
+const sketchRoutes = require('./routes/sketchRoutes');
 
 mongoose.connect(mongoURI)
 const conn = mongoose.connection
@@ -28,6 +29,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/auth',authRoutes)
+app.use('/sketch',sketchRoutes)
 
 // Define a simple route
 app.post('/api/genirate', async(req, res) => {

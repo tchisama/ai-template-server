@@ -5,7 +5,7 @@ const User = require('../models/user'); // Assuming you have a User model define
 // Signup route
 router.post('/signup', async (req, res) => {
   try {
-    const { name, email, photoProfile } = req.body;
+    const { name, email, photoProfile,user_id } = req.body;
 
     // Check if the email is already registered
     const existingUser = await User.findOne({ email });
@@ -18,12 +18,13 @@ router.post('/signup', async (req, res) => {
       name,
       email,
       photoProfile,
+      user_id,
     });
 
     // Save the user to the database
     await newUser.save();
 
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(201).json({ message: 'User registered successfully', newUser });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
