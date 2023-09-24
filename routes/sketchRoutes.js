@@ -40,6 +40,54 @@ router.post('/get-sketchs', async (req, res) => {
   }
 });
 
+router.post('/get-sketch', async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const sketch = await Sketch.findById(id)
+
+
+    res.status(201).json(sketch);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+router.post('/update-sketch', async (req, res) => {
+  try {
+    const { id , data , name } = req.body;
+
+    const sketch = await Sketch.findByIdAndUpdate(id,{
+        $set:{
+            data,
+            name
+        }
+    })
+
+
+    res.status(201).json({...sketch._doc,data,name});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+router.post('/delete-sketch', async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const sketch = await Sketch.findByIdAndDelete(id)
+
+
+    res.status(201).json({message:"delete done"});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
 
 module.exports = router;
 
