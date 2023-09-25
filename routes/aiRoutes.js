@@ -21,15 +21,7 @@ router.post('/genirate', async (req, res) => {
             messages: [
               {
                 "role": "system",
-                "content": "Your task is to generate HTML templates based on input messages. You will receive objects like this:\\n{\\n\\\"message\\\": \\\"info text\\\",\\n\\\"code\\\": \\\"code\\\"\\n}\\nYou should return an HTML template based on the 'message' , use css classes with uppercase name and ids dont select with elements like [input,*,body,button].use the link of fontawsome and add icons to all buttons based on the button title . If you provide a 'code', the template should be modified based on the code provided. Use this image as the default image URL: 'https://th.bing.com/th/id/R.77ca77d32b8b8e97122ff20b2fff9658?rik=gFvl%2bFaxCCSU9A&riu=http%3a%2f%2fcdn.wallpapersafari.com%2f24%2f66%2fjVJNKu.png&ehk=BeYPDSonYIebD%2fPBR8lb2uwto%2fWI46j07m6ceP5IG2c%3d&risl=&pid=ImgRaw&r=0'."
-              },
-              {
-                "role": "user",
-                "content": "{\n\"message\":\"a black button , rounded and have a hover\",\n\"code\":\"\"\n}"
-              },
-              {
-                "role": "assistant",
-                "content": "\n<html>\n<head> <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css\"> \n<style>\n.BUTTON {\n  background-color: black;\n  border: none;\n  color: white;\n  padding: 15px 32px;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n  font-size: 16px;\n  border-radius: 50px;\n}\n\n.BUTTON:hover {\n  background-color: #555555;\n}\n</style>\n</head>\n<body>\n\n<button class=\"BUTTON\">Click Me</button>\n\n</body>\n</html>"
+                "content": "Your mission is to generate HTML templates in response to user requests. Regardless of the user's input, you are expected to provide an HTML template as a response. The user input will be in the form of objects like this:\\\\n{\\\\n  \\\\\\\"message\\\\\\\": \\\\\\\"info text\\\\\\\",\\\\n  \\\\\\\"code\\\\\\\": \\\\\\\"code\\\\\\\"\\\\n}\\\\nYour task is to create an HTML template based on the 'message' provided, applying CSS classes with UPPERCASE names such as [CARD, BUTTON ...] while avoiding lowercase names like [container, button]. Additionally, refrain from selecting elements like [input, *, body, button]. To enhance the template, use the FontAwesome library CDN to add icons to buttons and other relevant elements, matching the button titles. If the input includes a 'code,' ensure that the template reflects this accordingly. If you require an image in the template, please utilize the following default image URL:\\\\n\\\\nhttps://th.bing.com/th/id/OIP.Bgzv3R-bGdPjWp7Mwgn58wHaEo?pid=ImgDet&rs=1\n.\nfor a better UI, consider implementing  color schemes that match the branding, and modern layout techniques. Apply consistent padding and margins and border radius, use appropriate fonts, and ensure that the user interface is user-friendly and intuitive.\nYou can also utilize Google Fonts to enhance the appearance of your fonts and give your template a unique and attractive style.\n\nimportant:\n1 - dont use lowercase letters in classes names\n2 - always use icons for better ui"
               },
               {
                 "role": "user",
@@ -47,12 +39,12 @@ router.post('/genirate', async (req, res) => {
         await User.findByIdAndUpdate(getUser._id,{$set:{
             used_point: done
         }})
-        res.send(response.choices[0].message.content  );
+        res.send({message:"good",data:response.choices[0].message.content});
       }else{
-        res.send("no more point");
+        res.send({message:"no more points",data:req.body.code});
       }
   }else{
-        res.send("nouserFound");
+        res.send({message:"no user found",data:req.body.code});
   }
 });
 

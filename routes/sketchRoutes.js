@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Sketch = require('../models/sketch'); // Assuming you have a User model defined
+const bodyParser = require('body-parser');
 
 // Signup route
 router.post('/create', async (req, res) => {
@@ -54,14 +55,29 @@ router.post('/get-sketch', async (req, res) => {
   }
 });
 
+router.get('/get-sketch/:id/:timestamp', async (req, res) => {
+  try {
+    const  id = req.params.id;
+
+    const sketch = await Sketch.findById(id)
+
+    res.send(sketch.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 router.post('/update-sketch', async (req, res) => {
   try {
-    const { id , data , name } = req.body;
+    const { id , data , name,image } = req.body;
+
 
     const sketch = await Sketch.findByIdAndUpdate(id,{
         $set:{
             data,
-            name
+            name,
+            image
         }
     })
 
